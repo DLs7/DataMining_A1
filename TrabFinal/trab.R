@@ -26,7 +26,14 @@ data <- cbind(data_column, data)
 # renomeia a coluna recem adicionada
 names(data)[names(data) == 'V2'] <- 'Data'
 
-rules <- apriori(data, parameter = list(sup=0.75, conf=0.8))
+# discretiza os valores
+for (i in 1:45){data[,i] <- as.factor(data[,i])}
+
+# rules <- apriori(data, parameter = list(minlen=2, sup=0.75, conf=0.8))
+
+# associacoes petrobras
+rules <- apriori(data, parameter = list(minlen=2, conf=0.7), appearance = list(lhs = c("PETR4.SA=acima"), default = "rhs"))
+
 inspect(sort(rules, by="confidence"))
 
 # save current dataframe to csv
